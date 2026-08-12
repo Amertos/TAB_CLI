@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <title>TAB_CLI SYSTEM</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="terminal-frame">
+    <!-- CRT Scanlines Effect Overlay -->
+    <div class="crt-overlay"></div>
+
+    <!-- Screws Top Corners -->
+    <div class="screw screw-tl"></div>
+    <div class="screw screw-tr"></div>
+    <div class="screw screw-bl"></div>
+    <div class="screw screw-br"></div>
+
+    <!-- TOP HEADER SECTION -->
+    <header class="header-plate">
+      <div class="meta-info">
+        <span class="console-id">CONSOLE_ID: MNT-99-ALPHA</span>
+        <h1 class="system-title">TAB_CLI<br><span class="highlight">SYSTEM</span></h1>
+      </div>
+      
+      <!-- Sticky Note -->
+      <div class="sticky-note">
+        <span id="tab-badge" class="sticky-count">0</span>
+        <span class="sticky-label">ACTIVE_TABS</span>
+      </div>
+    </header>
+
+    <!-- MAIN CONSOLE LAYOUT -->
+    <div class="console-body">
+      
+      <!-- LEFT COLUMN: MEMORY PANEL -->
+      <aside class="mem-panel">
+        <div class="panel-screw screw-top"></div>
+        <span class="panel-label">MEM_LOAD</span>
+        
+        <div class="meter-wrapper">
+          <span class="vertical-status">STATUS: ONLINE</span>
+          <div class="led-meter">
+            <div class="led-bar b10"></div>
+            <div class="led-bar b9"></div>
+            <div class="led-bar b8"></div>
+            <div class="led-bar b7"></div>
+            <div class="led-bar b6"></div>
+            <div class="led-bar b5"></div>
+            <div class="led-bar b4"></div>
+            <div class="led-bar b3"></div>
+            <div class="led-bar b2"></div>
+            <div class="led-bar b1"></div>
+          </div>
+        </div>
+
+        <div class="ram-readout">
+          <span id="ram-val" class="ram-num">0.0</span>
+          <span class="ram-target">/ 3.0GB</span>
+        </div>
+        <div class="panel-screw screw-bottom"></div>
+      </aside>
+
+      <!-- RIGHT COLUMN: CONTROLS & LOG -->
+      <main class="controls-panel">
+        
+        <!-- Navigation Tabs -->
+        <nav class="nav-row">
+          <button class="nav-btn active" data-tab="tab-dash">DASH</button>
+          <button class="nav-btn" data-tab="tab-saved">SAVED</button>
+          <button class="nav-btn" data-tab="tab-later">LATER</button>
+        </nav>
+
+        <!-- VIEW 1: DASHBOARD -->
+        <div id="tab-dash" class="tab-view active">
+          <!-- 3D Tactical Buttons Grid -->
+          <div class="tactical-grid">
+            <button id="btn-group" class="tac-btn">
+              <div class="btn-head"><span class="icon">❐</span> <span class="cmd-code">CMD_G</span></div>
+              <span class="btn-label">AUTO_GROUP</span>
+            </button>
+
+            <button id="btn-focus" class="tac-btn">
+              <div class="btn-head"><span class="icon">⛶</span> <span class="cmd-code">CMD_F</span></div>
+              <span class="btn-label">FOCUS_MODE</span>
+            </button>
+
+            <button id="btn-dedupe" class="tac-btn alert-btn">
+              <div class="btn-head"><span class="icon">⧉</span> <span class="cmd-code">CMD_D</span></div>
+              <span class="btn-label">DEDUPE_EXE</span>
+            </button>
+
+            <button id="btn-discard" class="tac-btn">
+              <div class="btn-head"><span class="icon">❄</span> <span class="cmd-code">CMD_Z</span></div>
+              <span class="btn-label">FREEZE_RAM</span>
+            </button>
+
+            <button id="btn-save-later" class="tac-btn">
+              <div class="btn-head"><span class="icon">⚑</span> <span class="cmd-code">CMD_P</span></div>
+              <span class="btn-label">PARK_TAB</span>
+            </button>
+
+            <button id="btn-ungroup" class="tac-btn">
+              <div class="btn-head"><span class="icon">⤢</span> <span class="cmd-code">CMD_U</span></div>
+              <span class="btn-label">UNGROUP</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- VIEW 2: SAVED SESSIONS -->
+        <div id="tab-saved" class="tab-view">
+          <div class="view-header">
+            <span>SAVED_SESSIONS</span>
+            <button id="btn-save-session" class="mini-btn">+ SAVE_NOW</button>
+          </div>
+          <ul id="session-list" class="node-list"></ul>
+        </div>
+
+        <!-- VIEW 3: LATER VAULT -->
+        <div id="tab-later" class="tab-view">
+          <div class="view-header">
+            <span>PARKED_VAULT</span>
+          </div>
+          <ul id="later-list" class="node-list"></ul>
+        </div>
+
+        <!-- SESSION LOG / ACTIVE NODES -->
+        <section class="terminal-log-box">
+          <div class="log-header">
+            <span>SESSION_LOG // ACTIVE_NODES</span>
+            <span id="nodes-count" class="nodes-badge">0</span>
+          </div>
+          <ul id="active-nodes-list" class="node-list active-nodes">
+            <!-- Dinamički JS spisak otvorenih tabova -->
+          </ul>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- BOTTOM HAZARD BAR -->
+    <footer class="hazard-bar">
+      <div class="sys-msg-box">
+        <span class="status-dot"></span>
+        <span class="sys-label">SYS_MSG_RECV:</span>
+        <span id="toast" class="msg-text">SYSTEM_ONLINE // READY</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

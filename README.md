@@ -14,12 +14,18 @@
 
 **A Metro Exodus-inspired tactical command console for managing Chrome tab radiation and saving system RAM.**
 
-[![Manifest V3](https://img.shields.io/badge/Chrome-Manifest_V3-10B981?style=for-the-badge&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/intro/)
+[![Latest Release](https://img.shields.io/badge/Download-Latest_Release_.ZIP-10B981?style=for-the-badge&logo=github)](https://github.com/Amertos/TAB_CLI/releases)
+[![Manifest V3](https://img.shields.io/badge/Chrome-Manifest_V3-3B82F6?style=for-the-badge&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/intro/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge)](LICENSE)
-[![Status: Online](https://img.shields.io/badge/System_Status-ONLINE-3B82F6?style=for-the-badge)](#)
 [![Privacy: 100% Offline](https://img.shields.io/badge/Privacy-100%25_Offline-8B5CF6?style=for-the-badge)](#)
 
 </div>
+
+---
+
+## 📌 Short Description
+
+> **TAB_CLI** is a hardware-inspired Chrome Extension that turns tab clutter management into a post-apocalyptic tactical survival console. Auto-group tab leaks, trigger emergency Focus Mode airlocks, freeze RAM radiation in cryo-stasis, and vault tabs into long-term bunker storage.
 
 ---
 
@@ -66,24 +72,29 @@ In the digital post-apocalyptic wasteland, open browser tabs are **radioactive l
 
 ---
 
-## 🚀 Installation & Setup
+## 📥 Installation & Setup
 
-1. **Clone or Download the Repository:**
-   ```bash
-   git clone https://github.com/Amertos/TAB_CLI.git
-   ```
+### Method 1: Direct Download (GitHub Releases - Recommended)
 
-2. **Open Chrome Extensions Manager:**
-   Navigate to `chrome://extensions/` in your Chrome address bar.
+1. Go to the **[GitHub Releases Page](https://github.com/Amertos/TAB_CLI/releases)**.
+2. Download the latest `TAB_CLI.zip` archive under **Assets**.
+3. Unzip the downloaded file onto your computer.
+4. Open Chrome and navigate to `chrome://extensions/`.
+5. Enable **Developer mode** in the top-right corner.
+6. Click **Load unpacked** in the top-left corner and select the unzipped folder.
 
-3. **Enable Developer Mode:**
-   Toggle the **Developer mode** switch in the top-right corner.
+---
 
-4. **Load Unpacked Extension:**
-   Click **Load unpacked** in the top-left corner and select the cloned `TAB_CLI` directory.
+### Method 2: Clone via Git (For Developers)
 
-5. **Pin to Toolbar:**
-   Pin `TAB_CLI SYSTEM` to your Chrome extension bar for instant tactical access.
+```bash
+# 1. Clone the repository
+git clone https://github.com/Amertos/TAB_CLI.git
+
+# 2. Open chrome://extensions/ in Chrome
+# 3. Enable Developer Mode (top-right toggle)
+# 4. Click "Load unpacked" and select the TAB_CLI folder
+```
 
 ---
 

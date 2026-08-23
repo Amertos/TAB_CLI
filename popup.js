@@ -1,13 +1,18 @@
 const $ = (id) => document.getElementById(id);
 
+// If you are reading this, i will add more :) 
 const DOMAIN_GROUPS = {
-  "🤖 AI & Chat": ["chatgpt.com", "claude.ai", "gemini.google.com", "huggingface.co"],
-  "🎥 Media": ["youtube.com", "netflix.com", "spotify.com", "twitch.tv", "cineby.at"],
-  "💻 Dev": ["github.com", "gitlab.com", "stackoverflow.com", "localhost", "aistudio.google.com"],
-  "📰 Social": ["x.com", "twitter.com", "reddit.com", "linkedin.com", "instagram.com"],
-  "Design" : ["figma.com", "canva.com", "motionsites.ai" ],
-  "News" : ["sandzakpress.net"]
-  
+  "🤖 AI & Chat": ["chatgpt.com", "claude.ai", "gemini.google.com", "huggingface.co", "perplexity.ai", "poe.com", "character.ai", "meta.ai", "copilot.microsoft.com", "you.com"],
+  "🎥 Media": ["youtube.com", "netflix.com", "spotify.com", "twitch.tv", "cineby.at", "hbomax.com", "primevideo.com", "disneyplus.com", "soundcloud.com", "vimeo.com", "9anime.to"],
+  "💻 Dev": ["github.com", "gitlab.com", "stackoverflow.com", "localhost", "aistudio.google.com", "npmjs.com", "vercel.com", "netlify.app", "codesandbox.io", "replit.com", "supabase.com", "developer.mozilla.org", "bitbucket.org"],
+  "📰 Social": ["x.com", "twitter.com", "reddit.com", "linkedin.com", "instagram.com", "facebook.com", "tiktok.com", "threads.net", "discord.com", "telegram.org"],
+  "Design" : ["figma.com", "canva.com", "motionsites.ai", "dribbble.com", "behance.net", "coolors.co" ],
+  "News" : ["sandzakpress.net", "bbc.com", "rts.rs", "n1info.rs", "danas.rs"],
+  "🛒 Shopping": ["amazon.com", "aliexpress.com", "ebay.com", "temu.com", "kupujemprodajem.com"],
+  "📚 Learning": ["udemy.com", "coursera.org", "edx.org", "khanacademy.org", "freecodecamp.org", "leetcode.com"],
+  "🏦 Finance": ["paypal.com", "wise.com", "binance.com", "raiffeisenbank.rs", "revolut.com"],
+  "☁️ Google": ["docs.google.com", "drive.google.com", "sheets.google.com", "mail.google.com", "calendar.google.com"],
+  "Email": ["outlook.com", "gmail.com", "yahoo.com"]
 };
 
 function estimateRam(tab) {
@@ -23,7 +28,6 @@ function estimateRam(tab) {
 document.addEventListener("DOMContentLoaded", async () => {
   setupNavTabs();
 
-  // Connecting all groups
   bindButton("btn-group", groupTabsByCategory);
   bindButton("btn-ungroup", ungroupAllTabs);
   bindButton("btn-focus", activateFocusMode);
@@ -32,14 +36,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   bindButton("btn-save-later", saveCurrentTabForLater);
   bindButton("btn-save-session", saveCurrentSession);
 
-  // refreshing of data
   await updateStats();
   await loadActiveNodes();
   await loadSessions();
   await loadLaterItems();
 });
 
-// 1.CHANGING DASH | SAVED | LATER
 function setupNavTabs() {
   const navBtns = document.querySelectorAll(".nav-btn");
   navBtns.forEach(btn => {
@@ -53,15 +55,9 @@ function setupNavTabs() {
 function switchTab(tabId) {
   if (!tabId) return;
 
-  // Updating active state of buttons
   document.querySelectorAll(".nav-btn").forEach(b => {
-    if (b.getAttribute("data-tab") === tabId) {
-      b.classList.add("active");
-    } else {
-      b.classList.remove("active");
-    }
+    b.classList.toggle("active", b.getAttribute("data-tab") === tabId);
   });
-
 
   document.querySelectorAll(".tab-view").forEach(view => {
     if (view.id === tabId) {
@@ -73,7 +69,6 @@ function switchTab(tabId) {
     }
   });
 
-  // Refresh stuff after 
   if (tabId === "tab-saved") loadSessions();
   if (tabId === "tab-later") loadLaterItems();
 }
@@ -85,29 +80,28 @@ function showToast(msg) {
 
 function bindButton(id, handler) {
   const el = $(id);
-  if (el) {
-    el.addEventListener("click", async () => {
-      try {
-        await handler();
-      } catch (err) {
-        console.error(`Greška [${id}]:`, err);
-      }
-    });
-  }
+  if (!el) return;
+  el.addEventListener("click", async () => {
+    try {
+      await handler();
+    } catch (err) {
+      console.error(`Greška [${id}]:`, err);
+    }
+  });
 }
 
-// Update RAM and LED bar
 async function updateStats() {
   const tabs = await chrome.tabs.query({ currentWindow: true });
-  
+
   const badge = $("tab-badge");
   if (badge) badge.textContent = tabs.length;
 
   const nodesBadge = $("nodes-count");
   if (nodesBadge) nodesBadge.textContent = tabs.length;
 
-  let totalRamMb = tabs.reduce((sum, tab) => sum + estimateRam(tab), 0);
-  let totalRamGb = (totalRamMb / 1024).toFixed(1);
+  let totalRamMb = 0;
+  for (const tab of tabs) totalRamMb += estimateRam(tab);
+  const totalRamGb = (totalRamMb / 1024).toFixed(1);
 
   const ramVal = $("ram-val");
   if (ramVal) ramVal.textContent = totalRamGb;
@@ -115,20 +109,19 @@ async function updateStats() {
   const percent = Math.min(100, Math.round((totalRamMb / 3000) * 100));
   const activeBarsCount = Math.ceil((percent / 100) * 10);
 
-  for (let i = 1; i <= 10; i++) {
-    const bar = document.querySelector(`.led-bar.b${i}`);
-    if (bar) {
-      bar.className = `led-bar b${i}`;
-      if (i <= activeBarsCount) {
-        if (i >= 8) bar.classList.add("active", "alert");
-        else if (i >= 5) bar.classList.add("active", "warn");
-        else bar.classList.add("active");
-      }
+  // led bars are just plain divs now, going off dom order instead of the old b1..b10 classes
+  const bars = document.querySelectorAll(".led-meter .led-bar");
+  bars.forEach((bar, idx) => {
+    const position = bars.length - idx; // first bar in the markup = top = "10"
+    bar.className = "led-bar";
+    if (position <= activeBarsCount) {
+      if (position >= 8) bar.classList.add("active", "alert");
+      else if (position >= 5) bar.classList.add("active", "warn");
+      else bar.classList.add("active");
     }
-  }
+  });
 }
 
-// Showing open ports 
 async function loadActiveNodes() {
   const tabs = await chrome.tabs.query({ currentWindow: true });
   const list = $("active-nodes-list");
@@ -145,7 +138,9 @@ async function loadActiveNodes() {
     let host = "local";
     try {
       if (tab.url) host = new URL(tab.url).hostname.replace("www.", "");
-    } catch(e) {}
+    } catch (e) {
+      // pending tabs / new tab page throw here, ignore
+    }
 
     const li = document.createElement("li");
     li.className = "node-item";
@@ -175,7 +170,7 @@ async function loadActiveNodes() {
   });
 }
 
-// 1. AUTO_GROUP (CMD_G)
+// CMD_G
 async function groupTabsByCategory() {
   const tabs = await chrome.tabs.query({ currentWindow: true });
   const groupsMap = {};
@@ -214,35 +209,35 @@ async function groupTabsByCategory() {
   let count = 0;
 
   for (const [title, tabIds] of Object.entries(groupsMap)) {
-    if (tabIds.length > 0) {
-      const groupId = await chrome.tabs.group({ tabIds });
-      await chrome.tabGroups.update(groupId, {
-        title,
-        color: groupColors[colorIdx % groupColors.length]
-      });
-      colorIdx++;
-      count++;
-    }
+    if (tabIds.length === 0) continue;
+    const groupId = await chrome.tabs.group({ tabIds });
+    await chrome.tabGroups.update(groupId, {
+      title,
+      color: groupColors[colorIdx % groupColors.length]
+    });
+    colorIdx++;
+    count++;
   }
 
   showToast(`CMD_EXEC // GROUPS_CREATED [${count}]`);
   await updateStats();
 }
 
-// 2. UNGROUP (CMD_U)
+// CMD_U
 async function ungroupAllTabs() {
   const tabs = await chrome.tabs.query({ currentWindow: true });
   const groupedTabIds = tabs.filter(t => t.groupId !== chrome.tabGroups.TAB_GROUP_ID_NONE).map(t => t.id);
 
-  if (groupedTabIds.length > 0) {
-    await chrome.tabs.ungroup(groupedTabIds);
-    showToast("CMD_EXEC // GROUPS_UNGROUPED");
-  } else {
+  if (groupedTabIds.length === 0) {
     showToast("SYS_MSG // NO_GROUPS_FOUND");
+    return;
   }
+
+  await chrome.tabs.ungroup(groupedTabIds);
+  showToast("CMD_EXEC // GROUPS_UNGROUPED");
 }
 
-// 3. DEDUPE_EXE (CMD_D)
+// CMD_D
 async function removeDuplicateTabs() {
   const tabs = await chrome.tabs.query({ currentWindow: true });
   const seenUrls = new Set();
@@ -250,24 +245,23 @@ async function removeDuplicateTabs() {
 
   tabs.forEach(tab => {
     const url = tab.url || tab.pendingUrl;
-    if (url && seenUrls.has(url)) {
-      duplicateIds.push(tab.id);
-    } else if (url) {
-      seenUrls.add(url);
-    }
+    if (!url) return;
+    if (seenUrls.has(url)) duplicateIds.push(tab.id);
+    else seenUrls.add(url);
   });
 
-  if (duplicateIds.length > 0) {
-    await chrome.tabs.remove(duplicateIds);
-    showToast(`DEDUPE // PURGED [${duplicateIds.length}] DUPES`);
-    await updateStats();
-    await loadActiveNodes();
-  } else {
+  if (duplicateIds.length === 0) {
     showToast("SYS_MSG // NO_DUPLICATES_FOUND");
+    return;
   }
+
+  await chrome.tabs.remove(duplicateIds);
+  showToast(`DEDUPE // PURGED [${duplicateIds.length}] DUPES`);
+  await updateStats();
+  await loadActiveNodes();
 }
 
-// 4. FOCUS_MODE (CMD_F)
+// CMD_F
 async function activateFocusMode() {
   const tabs = await chrome.tabs.query({ currentWindow: true });
   const activeTab = tabs.find(t => t.active);
@@ -294,17 +288,18 @@ async function activateFocusMode() {
   await loadSessions();
 }
 
-// 5. FREEZE_RAM (CMD_Z)
+// CMD_Z - discards background tabs, doesnt actually free JS memory til chrome feels like it
 async function freeUpRam() {
   const tabs = await chrome.tabs.query({ currentWindow: true, active: false });
   let count = 0;
 
   for (const tab of tabs) {
-    if (!tab.discarded && tab.url && !tab.url.startsWith("chrome://")) {
-      try {
-        await chrome.tabs.discard(tab.id);
-        count++;
-      } catch (e) {}
+    if (tab.discarded || !tab.url || tab.url.startsWith("chrome://")) continue;
+    try {
+      await chrome.tabs.discard(tab.id);
+      count++;
+    } catch (e) {
+      // some tabs just refuse to discard, whatever
     }
   }
 
@@ -313,7 +308,7 @@ async function freeUpRam() {
   await loadActiveNodes();
 }
 
-// 6. PARK_TAB (CMD_P)
+// CMD_P
 async function saveCurrentTabForLater() {
   const [activeTab] = await chrome.tabs.query({ currentWindow: true, active: true });
   if (!activeTab || !activeTab.url) return;
@@ -333,12 +328,9 @@ async function saveCurrentTabForLater() {
   await updateStats();
   await loadActiveNodes();
   await loadLaterItems();
-  
-  // Automaticly change to LATER
   switchTab("tab-later");
 }
 
-// SAVE_NOW
 async function saveCurrentSession() {
   const tabs = await chrome.tabs.query({ currentWindow: true });
   const newSession = {
@@ -354,7 +346,6 @@ async function saveCurrentSession() {
   await loadSessions();
 }
 
-// Loading Sessions in SAVED_tab
 async function loadSessions() {
   const { sessions = [] } = await chrome.storage.local.get("sessions");
   const list = $("session-list");
@@ -393,7 +384,6 @@ async function loadSessions() {
   });
 }
 
-// Loading Parked Sites in LATER tab
 async function loadLaterItems() {
   const { readLater = [] } = await chrome.storage.local.get("readLater");
   const list = $("later-list");

@@ -6,15 +6,15 @@ Built this to quickly deal with having way too many tabs open.
 
 ## Features
 
-- **Auto Group** - Automatically groups tabs by domain.
-- **Focus Mode** - Saves background tabs to storage and leaves only the active one open.
-- **Dedupe** - Finds and closes duplicate tabs.
-- **Freeze RAM** - Discards inactive tabs (`chrome.tabs.discard`) to free up memory without losing them.
-- **Park Tab** - Saves a tab for later and closes it.
-- **Session / Later tabs** - Save current window tabs or view parked links.
-- **Memory meter** - Simple visual meter showing tab load.
+- **Auto Group** - Automatically groups tabs by domain
+- **Focus Mode** - Saves background tabs to storage and leaves only the active one open
+- **Dedupe** - Finds and closes duplicate tabs
+- **Freeze RAM** - Discards inactive tabs (`chrome.tabs.discard`) to free up memory without losing them
+- **Park Tab** - Saves a tab for later and closes it
+- **Session / Later tabs** - Save current window tabs or view parked links
+- **Memory meter** - Simple visual meter showing tab load
 
-100% offline, no tracking, no external calls.
+ITS OFFLINE
 
 ## How to Install
 
@@ -26,7 +26,7 @@ Built this to quickly deal with having way too many tabs open.
 
 ## Tech
 
-- Plain HTML, CSS, Vanilla JS (Manifest V3). No frameworks or dependencies needed.
+HTML - CSS - Vanilla JavaScript
 
 ## License
 
